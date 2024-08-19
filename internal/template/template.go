@@ -66,6 +66,14 @@ var _ {{$.SrcPkgQualifier}}{{.InterfaceName -}}
 {}
 {{- end}}
 
+// Simple provider method for the base mock.
+func New{{.MockName}}() *{{.MockName}} {
+	return &{{.MockName}}{}
+}
+// Wire compatible provider method for the defined interface.
+func Provide{{.MockName}}() {{.InterfaceName}} {
+	return New{{.MockName}}()
+}
 // {{.MockName}} is a mock implementation of {{$.SrcPkgQualifier}}{{.InterfaceName}}.
 //
 //	func TestSomethingThatUses{{.InterfaceName}}(t *testing.T) {
