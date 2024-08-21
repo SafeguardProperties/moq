@@ -23,6 +23,7 @@ type userFlags struct {
 	stubImpl   bool
 	skipEnsure bool
 	withResets bool
+	wireName   string
 	remove     bool
 	args       []string
 }
@@ -32,6 +33,7 @@ func main() {
 	flag.StringVar(&flags.outFile, "out", "", "output file (default stdout)")
 	flag.StringVar(&flags.pkgName, "pkg", "", "package name (default will infer)")
 	flag.StringVar(&flags.formatter, "fmt", "", "go pretty-printer: gofmt, goimports or noop (default gofmt)")
+	flag.StringVar(&flags.wireName, "wirename", "", "Generate wireset with this name.")
 	flag.BoolVar(&flags.stubImpl, "stub", false,
 		"return zero values when no mock implementation is provided, do not panic")
 	printVersion := flag.Bool("version", false, "show the version for moq")
@@ -90,6 +92,8 @@ func run(flags userFlags) error {
 		StubImpl:   flags.stubImpl,
 		SkipEnsure: flags.skipEnsure,
 		WithResets: flags.withResets,
+		WithWire:   len(flags.wireName) > 0,
+		WireName:   flags.wireName,
 	})
 	if err != nil {
 		return err

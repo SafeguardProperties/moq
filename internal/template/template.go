@@ -41,7 +41,18 @@ import (
 {{- range .Imports}}
 	{{. | ImportStatement}}
 {{- end}}
+{{- if .WithWire }}
+	"github.com/google/wire"
+{{- end }}
 )
+
+{{- if .WithWire }}
+var WireSet{{.WireName}}Mock = wire.NewSet(
+{{range $i, $mock := .Mocks -}}
+	Provide{{.MockName}},
+{{ end }}
+)
+{{- end }}
 
 {{range $i, $mock := .Mocks -}}
 
@@ -74,6 +85,7 @@ func New{{.MockName}}() *{{.MockName}} {
 func Provide{{.MockName}}() {{.InterfaceName}} {
 	return New{{.MockName}}()
 }
+
 // {{.MockName}} is a mock implementation of {{$.SrcPkgQualifier}}{{.InterfaceName}}.
 //
 //	func TestSomethingThatUses{{.InterfaceName}}(t *testing.T) {
